@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# Mario Jump Game 🎮
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a **study and learning exercise** built with **React + Vite**, inspired by classic side-scrolling jump games.
 
-Currently, two official plugins are available:
+The goal of the project is to practice **frontend fundamentals**, **game mechanics**, and **responsive animation logic** using modern web technologies.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> ⚠️ **Important disclaimer:**  
+> This project is **not affiliated with, endorsed by, or associated with Nintendo** or any official Mario franchise.  
+> All characters, names, and visual references belong to their respective copyright holders.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📚 Purpose of the Project
 
-## Expanding the ESLint configuration
+This project was created **strictly for educational purposes**, focusing on:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React fundamentals and component architecture
+- CSS animations and timing control
+- Collision detection logic
+- Responsive game physics (consistent behavior across screen sizes)
+- Input handling (keyboard, mouse, and touch)
+- Clean code organization and reusable utilities
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+It is **not intended for commercial use**, monetization, or redistribution as a standalone game.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## 🧠 What Was Implemented
+
+- Jump mechanic with animation timing
+- Pipe obstacle with constant perceived speed across devices
+- Collision detection using hitboxes
+- Game states:
+  - Instructions (paused)
+  - Playing
+  - Game Over
+- Score system based on successfully jumping over obstacles
+- Fully responsive layout (desktop + mobile)
+- Support for:
+  - Keyboard input
+  - Mouse click
+  - Touch (mobile tap)
+
+---
+
+## 🛠️ Tech Stack
+
+- **React**
+- **Vite**
+- **TypeScript**
+- **CSS Animations**
+- **requestAnimationFrame** for game loop
+- No external game engines or libraries
+
+---
+
+## 📱 Controls
+
+- **Desktop**
+  - `Space` or `Arrow Up` → Jump
+  - Mouse click → Jump
+- **Mobile**
+  - Tap anywhere → Jump
+
+---
+
+## ⚖️ Copyright & Fair Use Notice
+
+This project is a **fan-made educational exercise**.
+
+- No original game assets were created to imitate or replace the official product
+- No commercial intent
+- No revenue generation
+- No claim of ownership over characters, names, or likenesses
+
+If you are the copyright holder and have concerns, please feel free to reach out.
+
+---
+
+## 🚀 How to Run Locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## To test on mobile devices:
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm run dev -- --host
 ```
+Then open the network URL on a device connected to the same Wi-Fi.
+
+## 👤 Author:
+
+Built by Maria Eduarda Cagy as a personal study project.
+
+- GitHub: https://github.com/maria-eduarda-cagy
+
+- LinkedIn: https://www.linkedin.com/in/maria-eduarda-cagy/
+
+- CV: https://front-end-cv-portfolio.vercel.app/
