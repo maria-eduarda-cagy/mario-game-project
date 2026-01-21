@@ -100,3 +100,9 @@ Built by Maria Eduarda Cagy as a personal study project.
 - LinkedIn: https://www.linkedin.com/in/maria-eduarda-cagy/
 
 - CV: https://front-end-cv-portfolio.vercel.app/
+
+## ✅ License
+
+This repository is shared for learning and reference only.
+
+Please do not use it for commercial purposes.
