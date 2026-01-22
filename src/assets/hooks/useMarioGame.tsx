@@ -39,7 +39,7 @@ export function useMarioGame() {
     f.counted = false;
     f.jumped = false;
     f.prevX = null;
-  };
+  }; 
 
   const handleStart = (e?: React.SyntheticEvent) => {
     e?.stopPropagation();
@@ -86,6 +86,31 @@ export function useMarioGame() {
     // Reset scoring flags
     resetRunFlags();
   };
+
+  // Recalculate physics based on current score and board size (bug fix)
+  useEffect(() => {
+    const boardEl = boardRef.current;
+    const pipeEl = pipeRef.current;
+    if (!boardEl || !pipeEl) return;
+
+    const apply = () => {
+      applyGamePhysics({ boardEl, pipeEl, score });
+    };
+
+    apply();
+    // Reapply physics only when the pipe animation restarts
+    const onIter = () => apply();
+    pipeEl.addEventListener("animationiteration", onIter);
+
+    // Recalculate on resize so speed stays consistent with board width
+    const onResize = () => apply();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      pipeEl.removeEventListener("animationiteration", onIter);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [score]);
 
   // Physics (responsive + difficulty)
   useEffect(() => {
