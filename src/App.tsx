@@ -1,168 +1,37 @@
 import "./App.css";
-import { useEffect, useRef, useState } from "react";
 
 import pipe from "../public/pipe.png";
-import mario from "../public/mario.gif";
-import marioGameOver from "../public/game-over.png";
 import clouds from "../public/clouds.png";
 
 import { Header } from "./assets/components/header";
 import { Jump } from "./assets/functions/jump";
-
-import { checkGameOver } from "./assets/functions/gameOver";
-import { marioHitBox, pipeHitBox } from "./assets/utils/const";
-import { applyGamePhysics } from "./assets/functions/gamePhysics";
-import {
-  resetAfterRestart,
-  resetAfterStart,
-} from "./assets/functions/gameReset";
-import {
-  freezeMarioAtCollision,
-  freezePipeAtCurrentPosition,
-} from "./assets/functions/freezeCollision";
+import { useMarioGame } from "./assets/hooks/useMarioGame";
 
 function App() {
-  const boardRef = useRef<HTMLDivElement | null>(null);
-  const marioRef = useRef<HTMLImageElement | null>(null);
-  const pipeRef = useRef<HTMLImageElement | null>(null);
-  const countedThisPipeRef = useRef(false);
-  const jumpedThisPipeRef = useRef(false);
+  const {
+    boardRef,
+    marioRef,
+    pipeRefs,
 
-  const [gameOver, setGameOver] = useState(false);
-  const [marioImg, setMarioImg] = useState(mario);
-  const [showInstructions, setShowInstructions] = useState(true);
-  const [score, setScore] = useState(0);
+    gameOver,
+    marioImg,
+    showInstructions,
+    score,
+    pipeCount,
+    pipeGapDelayMs,
 
-  const handleStart = (e?: React.SyntheticEvent) => {
-    e?.stopPropagation();
-
-    // Start always resets the run state
-    setGameOver(false);
-    setMarioImg(mario);
-
-    resetAfterStart({
-      pipeEl: pipeRef.current,
-      marioEl: marioRef.current,
-    });
-
-    setShowInstructions(false);
-  };
-
-  const handleRestart = () => {
-    setGameOver(false);
-    setMarioImg(mario);
-
-    resetAfterRestart({
-      pipeEl: pipeRef.current,
-      marioEl: marioRef.current,
-    });
-    setScore(0);
-    countedThisPipeRef.current = false;
-    jumpedThisPipeRef.current = false;
-  };
-
-  // Physics (responsive)
-  useEffect(() => {
-    const update = () =>
-      applyGamePhysics({
-        boardEl: boardRef.current,
-        pipeEl: pipeRef.current,
-      });
-
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  // Collision loop
-  useEffect(() => {
-    let rafId = 0;
-
-    const loop = () => {
-      // Only check collisions while actively playing
-      if (!gameOver && !showInstructions) {
-        const collided = checkGameOver(
-          marioRef.current,
-          pipeRef.current,
-          marioHitBox,
-          pipeHitBox,
-        );
-
-        if (collided) {
-          setGameOver(true);
-          setMarioImg(marioGameOver);
-
-          if (boardRef.current && pipeRef.current) {
-            freezePipeAtCurrentPosition({
-              boardEl: boardRef.current,
-              pipeEl: pipeRef.current,
-            });
-          }
-
-          if (marioRef.current && pipeRef.current) {
-            freezeMarioAtCollision({
-              marioEl: marioRef.current,
-              pipeEl: pipeRef.current,
-              marioHitBox,
-              pipeHitBox,
-              gapPx: 2,
-            });
-          }
-
-          return;
-        }
-      }
-      const marioEl = marioRef.current;
-      const pipeEl = pipeRef.current;
-      const boardEl = boardRef.current;
-
-      if (marioEl && pipeEl && boardEl) {
-        const marioRect = marioEl.getBoundingClientRect();
-        const pipeRect = pipeEl.getBoundingClientRect();
-        const boardRect = boardEl.getBoundingClientRect();
-
-        const isPipeNearMario =
-          pipeRect.left < marioRect.right && pipeRect.right > marioRect.left;
-
-        if (isPipeNearMario && marioEl.classList.contains("jump")) {
-          jumpedThisPipeRef.current = true;
-        }
-
-        const pipePassedMario = pipeRect.right < marioRect.left;
-
-        if (pipePassedMario && !countedThisPipeRef.current) {
-          countedThisPipeRef.current = true;
-
-          if (jumpedThisPipeRef.current) {
-            setScore((prev) => prev + 1);
-          }
-        }
-
-        const pipeLeftInBoardPx = pipeRect.left - boardRect.left;
-
-        // when animation restarts, left goes back to ~boardWidth
-        const respawnThreshold = boardRect.width - 5; // small tolerance
-        const pipeRespawn = pipeLeftInBoardPx >= respawnThreshold;
-
-        if (pipeRespawn) {
-          countedThisPipeRef.current = false;
-          jumpedThisPipeRef.current = false;
-        }
-      }
-
-      rafId = requestAnimationFrame(loop);
-    };
-
-    rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
-  }, [gameOver, showInstructions]);
+    handleStart,
+    handleRestart,
+  } = useMarioGame();
 
   return (
     <>
       <Header />
+
       <div className="hud">
         <span>Score: {score}</span>
       </div>
+
       <div className="game-board" ref={boardRef}>
         <img
           src={clouds}
@@ -177,6 +46,12 @@ function App() {
           className={gameOver ? "mario--game-over" : ""}
           showInstructions={showInstructions}
         />
+
+        {score > 5 && !showInstructions && !gameOver && (
+          <div className="speed-warning">
+            <p>Watch out! The pipes are moving faster!</p>
+          </div>
+        )}
 
         {showInstructions && (
           <div className="instructions-overlay">
@@ -195,7 +70,22 @@ function App() {
           </div>
         )}
 
-        <img src={pipe} alt="pipe" className="pipe" ref={pipeRef} />
+        {Array.from({ length: pipeCount }).map((_, i) => (
+          <img
+            key={`pipe-${i}`}
+            src={pipe}
+            alt="pipe"
+            className={`pipe pipe-${i}`}
+            ref={(el) => {
+              pipeRefs.current[i] = el;
+            }}
+            style={{
+              animationPlayState: gameOver ? "paused" : "running",
+              // Use negative delay so pipes are spaced immediately
+              animationDelay: `-${Math.floor(i * pipeGapDelayMs)}ms`,
+            }}
+          />
+        ))}
 
         {gameOver && (
           <div className="game-over-overlay">
