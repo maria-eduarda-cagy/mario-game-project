@@ -5,7 +5,7 @@ export type JumpProps = {
   disabled?: boolean;
   className?: string;
   showInstructions?: boolean;
-    onJump?: () => void; 
+  onJump?: () => void;
 };
 
 export type HitBoxConfig = {
@@ -20,4 +20,12 @@ export type CollisionSide = "TOP" | "BOTTOM" | "LEFT" | "RIGHT";
 export type ApplyGamePhysicsArgs = {
   boardEl: HTMLDivElement | null;
   pipeEl: HTMLImageElement | null;
+  score: number;
+  pipeCount: number;
+};
+
+export type PipeFlags = {
+  counted: boolean;
+  jumped: boolean;
+  prevX: number | null;
 };

@@ -21,18 +21,17 @@
   --jump-duration: 850ms;
   --jump-height: 150px;
 
-  --pipe-duration: 2400ms;
   --pipe-start: 100%;
   --pipe-end: -10%;
   --pipe-x: 80%;
-  --pipe-size: 65px;
+  --pipe-size: 60px;
 
   --clouds-duration: 20000ms;
   --clouds-start: 100%;
   --clouds-end: -400px;
 
   @media (min-width: 768px) {
-    --pipe-size: 75px;
+    --pipe-size: 65px;
   }
 }
 
@@ -69,7 +68,12 @@
   width: var(--pipe-size);
   left: var(--pipe-start);
   animation: pipe-animation var(--pipe-duration) linear infinite;
+  will-change: transform;
   transform: translateY(0);
+}
+
+.pipe-1{
+left:-30px;
 }
 
 .clouds {
