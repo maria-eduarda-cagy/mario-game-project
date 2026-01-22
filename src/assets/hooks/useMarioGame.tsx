@@ -34,6 +34,9 @@ export function useMarioGame() {
   const [pipeDurationMs, setPipeDurationMs] = useState(2400);
   const [pipeGapDelayMs, setPipeGapDelayMs] = useState(1200);
 
+  const isTouch =
+  "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
   const resetRunFlags = () => {
     const f = pipeFlagsRef.current;
     f.counted = false;
@@ -222,5 +225,6 @@ export function useMarioGame() {
     // actions
     handleStart,
     handleRestart,
+    isTouch
   };
 }

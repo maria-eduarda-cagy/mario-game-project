@@ -20,6 +20,8 @@ function App() {
 
     handleStart,
     handleRestart,
+
+    isTouch,
   } = useMarioGame();
 
   return (
@@ -56,9 +58,16 @@ function App() {
             <div className="instructions-card">
               <h2>How to Play</h2>
               <ul>
-                <li>
-                  Press <b>Space</b> or <b>Arrow Up</b> to jump
+                <li id="how-to-jump">
+                  {isTouch ? (
+                    <><b>Tap</b> the screen to jump</>
+                  ) : (
+                    <>
+                      Press <b>Space</b> or <b>Arrow Up</b> to jump
+                    </>
+                  )}
                 </li>
+
                 <li>Avoid the pipes</li>
                 <li>Try to survive as long as possible</li>
               </ul>
