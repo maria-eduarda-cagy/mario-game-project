@@ -21,9 +21,6 @@
   --jump-duration: 850ms;
   --jump-height: 150px;
 
-  --pipe-start: 100%;
-  --pipe-end: -10%;
-  --pipe-x: 80%;
   --pipe-size: 60px;
 
   --clouds-duration: 20000ms;
@@ -66,14 +63,10 @@
   position: absolute;
   bottom: 50px;
   width: var(--pipe-size);
-  left: var(--pipe-start);
+  left: 100%;
   animation: pipe-animation var(--pipe-duration) linear infinite;
-  will-change: transform;
+  will-change: left;
   transform: translateY(0);
-}
-
-.pipe-1{
-left:-30px;
 }
 
 .clouds {
@@ -185,13 +178,59 @@ left:-30px;
 .game-board.paused .mario {
   animation-play-state: paused;
 }
+.speed-warning {
+  position: absolute;
+  top: 22%;
+  left:  50%;
+  transform: translateX(-50%);
+  z-index: 55;
+
+  background: linear-gradient(135deg, #ff0000, #ff3d3d);
+  color: #fff;
+
+  padding: 10px 16px;
+  border-radius: 12px;
+
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+
+  animation: speed-warning-pop 0.35s ease-out;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    padding: 12px 20px;
+    top: 6%;
+  }
+}
+
+.speed-warning p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* subtle pop-in so it feels reactive, not annoying */
+@keyframes speed-warning-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
 
 @keyframes pipe-animation {
   from {
-    left: var(--pipe-start);
+    left: 100%;
   }
   to {
-    left: var(--pipe-end);
+    left: calc(-1 * (var(--pipe-size) + 80px));
   }
 }
 

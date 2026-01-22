@@ -45,7 +45,7 @@ function App() {
           showInstructions={showInstructions}
         />
 
-        {score > 5 && !showInstructions && !gameOver && (
+        {!showInstructions && (
           <div className="speed-warning">
             <p>Watch out! The pipes are moving faster!</p>
           </div>
