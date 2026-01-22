@@ -21,7 +21,6 @@ export type ApplyGamePhysicsArgs = {
   boardEl: HTMLDivElement | null;
   pipeEl: HTMLImageElement | null;
   score: number;
-  pipeCount: number;
 };
 
 export type PipeFlags = {

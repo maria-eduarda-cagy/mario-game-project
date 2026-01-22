@@ -1,12 +1,7 @@
 import type { ApplyGamePhysicsArgs } from "../types";
 import { clamp } from "../utils/utils";
 
-export function applyGamePhysics({
-  boardEl,
-  pipeEl,
-  score,
-  pipeCount,
-}: ApplyGamePhysicsArgs) {
+export function applyGamePhysics({ boardEl, pipeEl, score }: ApplyGamePhysicsArgs) {
   if (!boardEl || !pipeEl) return { pipeDurationMs: 2400, pipeGapDelayMs: 1200 };
 
   const boardRect = boardEl.getBoundingClientRect();
@@ -14,8 +9,7 @@ export function applyGamePhysics({
 
   const baseSpeed = 420;
 
-  // Speed only increases every `pipeCount` points
-  const difficultyStep = pipeCount != 1 ? 6:(Math.floor(score / Math.max(1, pipeCount)))
+  const difficultyStep = score;
 
   // px/s per step (tweak this value)
   const speed = clamp(baseSpeed + difficultyStep * 18, 420, 650);

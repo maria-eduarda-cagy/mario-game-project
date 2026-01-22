@@ -11,14 +11,12 @@ function App() {
   const {
     boardRef,
     marioRef,
-    pipeRefs,
+    pipeRef,
 
     gameOver,
     marioImg,
     showInstructions,
     score,
-    pipeCount,
-    pipeGapDelayMs,
 
     handleStart,
     handleRestart,
@@ -70,22 +68,7 @@ function App() {
           </div>
         )}
 
-        {Array.from({ length: pipeCount }).map((_, i) => (
-          <img
-            key={`pipe-${i}`}
-            src={pipe}
-            alt="pipe"
-            className={`pipe pipe-${i}`}
-            ref={(el) => {
-              pipeRefs.current[i] = el;
-            }}
-            style={{
-              animationPlayState: gameOver ? "paused" : "running",
-              // Use negative delay so pipes are spaced immediately
-              animationDelay: `-${Math.floor(i * pipeGapDelayMs)}ms`,
-            }}
-          />
-        ))}
+        <img src={pipe} alt="pipe" className="pipe" ref={pipeRef} />
 
         {gameOver && (
           <div className="game-over-overlay">
